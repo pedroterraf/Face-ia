@@ -71,7 +71,7 @@ function App() {
           label: `${Math.round(detection.age)} Age, ${detection.gender}`
         }).draw(canvasRef.current)
       })
-    }, 500)
+    }, 100)
   }
 
   return (
