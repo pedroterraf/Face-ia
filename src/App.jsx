@@ -57,7 +57,7 @@ function App(){
       faceapi.draw.drawFaceLandmarks(canvasRef.current,resized)
       faceapi.draw.drawFaceExpressions(canvasRef.current,resized)
 
-    },700)
+    },100)
   }
 
   return (
