@@ -13,7 +13,7 @@
 
 .canvas{
   position: absolute;
-  top: 180px;
+  top: 160px;
   width: 890px;
   height: 650px;
 }
@@ -121,8 +121,6 @@ body {
 }
 
 @media (max-width: 850px) {
-  .app {
-  }
   .video {
     width: 95%;
     height: 280px;  
