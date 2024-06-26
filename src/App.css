@@ -128,7 +128,7 @@ body {
   .canvas{
     position: absolute;
     top: 155px;
-    width: 95%;
+    width: 220px;
     height: 280px; 
   }
   .app_header_text {
