@@ -64,7 +64,7 @@ function App(){
     <div className="app">
         <h1 className='app_header_text'>Artificial intelligence</h1>
         <video ref={videoRef} autoPlay className='video'></video>
-        <canvas ref={canvasRef} width="940" height="650" className="canvas"/>
+        <canvas ref={canvasRef} className="canvas"/>
     </div>
     )
 
