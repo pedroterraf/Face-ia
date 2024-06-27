@@ -101,16 +101,21 @@ function App() {
       <h1 className='app_header_text'>Artificial Intelligence</h1>
       {isLoading &&
         <Skeleton
-          sx={{bgcolor: 'grey.900'}}
+          sx={{bgcolor: 'grey.900', zIndex:2}}
           variant="rectangular"
           className='video'
         />
       }
+      { !isVideoPlaying &&
+        <img src='/img_face_ia.png' alt="" className='img_ia'/>
+      }
       <video ref={videoRef} autoPlay className='video' style={{ display: isLoading ? 'none' : 'block' }}></video>
       <canvas ref={canvasRef} className="canvas" />
-      <Button variant='contained' onClick={startVideo} className='button'>
-        {isVideoPlaying ? 'Stop' : 'Scan me'}
-      </Button>
+      <div className='container_button'>
+        <Button variant='contained' onClick={startVideo} className='button'>
+          {isVideoPlaying ? 'Stop' : 'Scan me'}
+        </Button>
+      </div>
     </div>
   )
 }

@@ -59,14 +59,18 @@
     padding: 0;
     overflow: hidden;
   }
+
+  .container_button {
+    width: 940px;
+  }
   
   .button {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     font-family: "Chakra Petch", sans-serif !important;
-    width: 320px !important;
-    height: 50px !important;
+    width: 100% !important;
+    height: 100px !important;
     text-transform: uppercase !important;
     border-radius: 6px !important;
     font-size: 35px !important;
@@ -99,6 +103,13 @@
     box-shadow: none !important;
   }
 
+  .img_ia{
+    width: 500px;
+    position: fixed;
+    top: 220px;
+    z-index: 1;
+  }
+
 @media (max-width: 850px) {
   .video {
     width: 95% !important;
@@ -116,5 +127,18 @@
     padding: 0;
     margin-top: .5em;
     margin-bottom: .2em;
+  }
+  .img_ia{
+    width: 300px;
+    top: 220px;
+    z-index: 1;
+  }
+  .container_button {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+  .button {
+    width: 100%;
   }
 }
