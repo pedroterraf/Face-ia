@@ -61,7 +61,10 @@
   }
 
   .container_button {
+    position: fixed;
     width: 940px;
+    width: 100%;
+    bottom: 0;
   }
   
   .button {
@@ -103,11 +106,29 @@
     box-shadow: none !important;
   }
 
+  @keyframes imageShimmer {
+    0% {
+      filter: brightness(1);
+    }
+    50% {
+      filter: brightness(1.3);
+    }
+    100% {
+      filter: brightness(1);
+    }
+  }
+
   .img_ia{
     width: 500px;
     position: fixed;
-    top: 220px;
+    top: 15%;
     z-index: 1;
+    transition: transform 0.3s;
+    animation: imageShimmer 2s infinite alternate;
+  }
+
+  .img_ia:hover{
+    transform: scale(1.2); 
   }
 
 @media (max-width: 850px) {
