@@ -18,18 +18,14 @@ function App() {
 
   const requestCameraPermission = async () => {
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert("Tu navegador no soporta acceso a la cámara.");
+      const permission = await navigator.permissions.query({ name: "camera" });
+
+      if (permission.state === "denied") {
+        alert("Permiso de cámara denegado. Habilítalo en la configuración del navegador.");
         return;
       }
 
-      const permission = await navigator.permissions.query({ name: 'camera' });
-
-      if (permission.state === 'denied') {
-        alert('Permiso de cámara denegado. Habilítalo en la configuración del navegador.');
-        return;
-      }
-
+      // Prueba abrir la cámara para forzar la solicitud de permiso
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       stream.getTracks().forEach(track => track.stop());
     } catch (error) {
@@ -109,7 +105,7 @@ function App() {
   return (
     <div className="app">
       <h1 className='app_header_text'>Artificial Intelligence</h1>
-      
+
       {isLoading && (
         <Skeleton
           sx={{ bgcolor: 'grey.900', zIndex: 2 }}
@@ -119,12 +115,18 @@ function App() {
       )}
 
       {!isVideoPlaying && <img src='/img_face_ia.png' alt="" className='img_ia' />}
-      
+
       <video ref={videoRef} autoPlay className='video' style={{ display: isLoading ? 'none' : 'block' }}></video>
       <canvas ref={canvasRef} className="canvas" />
-      
+
       <div className='container_button'>
-        <Button variant='contained' onClick={startVideo} className='button'>
+        <Button
+          variant='contained'
+          onClick={() => {
+            requestCameraPermission();
+            startVideo();
+          }}
+          className='button'>
           {isVideoPlaying ? 'Stop' : 'Scan me'}
         </Button>
       </div>
