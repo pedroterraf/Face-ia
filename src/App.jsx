@@ -11,6 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const streamRef = useRef();
+  const intervalRef = useRef(); // 🔧 CAMBIO: guardar el ID del intervalo
 
   useEffect(() => {
     loadModels();
@@ -18,31 +19,20 @@ function App() {
 
   const requestCameraPermission = async () => {
     try {
-      const permission = await navigator.permissions.query({ name: "camera" });
-
-      if (permission.state === "denied") {
-        alert("Permiso de cámara denegado. Habilítalo en la configuración del navegador.");
-        return;
-      }
-
-      // Prueba abrir la cámara para forzar la solicitud de permiso
+      // 🔧 CAMBIO: eliminado uso innecesario de `navigator.permissions.query`
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       stream.getTracks().forEach(track => track.stop());
     } catch (error) {
       console.error("No se pudo acceder a la cámara:", error);
+      alert("Permiso de cámara denegado. Habilítalo en la configuración del navegador.");
     }
   };
 
   const startVideo = async () => {
     if (isVideoPlaying) {
-      const tracks = streamRef.current?.getTracks();
-      tracks?.forEach(track => track.stop());
-      videoRef.current.srcObject = null;
-      canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      setIsVideoPlaying(false);
+      stopVideo(); // 🔧 CAMBIO: usar función dedicada para detener
     } else {
       setIsLoading(true);
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
         streamRef.current = stream;
@@ -61,6 +51,16 @@ function App() {
     }
   };
 
+  // 🔧 CAMBIO: nueva función para detener el video correctamente
+  const stopVideo = () => {
+    const tracks = streamRef.current?.getTracks();
+    tracks?.forEach(track => track.stop());
+    videoRef.current.srcObject = null;
+    canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    clearInterval(intervalRef.current); // 🔧 CAMBIO: detener el intervalo
+    setIsVideoPlaying(false);
+  };
+
   const loadModels = async () => {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
@@ -75,7 +75,7 @@ function App() {
   };
 
   const faceMyDetect = () => {
-    setInterval(async () => {
+    intervalRef.current = setInterval(async () => {
       if (!videoRef.current || videoRef.current.readyState !== 4) return;
 
       const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
@@ -83,11 +83,13 @@ function App() {
         .withFaceExpressions()
         .withAgeAndGender();
 
-      canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
+      canvasRef.current.width = 940;
+      canvasRef.current.height = 650;
       faceapi.matchDimensions(canvasRef.current, { width: 940, height: 650 });
 
       const resized = faceapi.resizeResults(detections, { width: 940, height: 650 });
-      canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      const ctx = canvasRef.current.getContext('2d');
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
       faceapi.draw.drawDetections(canvasRef.current, resized);
       faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
@@ -122,8 +124,8 @@ function App() {
       <div className='container_button'>
         <Button
           variant='contained'
-          onClick={() => {
-            requestCameraPermission();
+          onClick={async () => {
+            await requestCameraPermission();
             startVideo();
           }}
           className='button'>
