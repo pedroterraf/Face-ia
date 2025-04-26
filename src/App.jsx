@@ -36,8 +36,6 @@ function App() {
   };
 
   const startVideo = async () => {
-    console.log(isIOS());
-    console.log(isSafari());
     
     if (isIOS() && isSafari() && window.location.protocol !== "https:") {
       alert("En iOS Safari, la cámara solo funciona sobre HTTPS o localhost.");
