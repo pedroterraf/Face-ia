@@ -50,13 +50,12 @@ function App() {
     }
   };
 
-  // 🔧 CAMBIO: nueva función para detener el video correctamente
   const stopVideo = () => {
     const tracks = streamRef.current?.getTracks();
     tracks?.forEach(track => track.stop());
     videoRef.current.srcObject = null;
     canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    clearInterval(intervalRef.current); // 🔧 CAMBIO: detener el intervalo
+    clearInterval(intervalRef.current);
     setIsVideoPlaying(false);
   };
 
@@ -123,9 +122,10 @@ function App() {
       <div className='container_button'>
         <Button
           variant='contained'
-          onClick={
-            startVideo
-          }
+          onClick={async () => {
+            await requestCameraPermission();
+            startVideo();
+          }}
           className='button'>
           {isVideoPlaying ? 'Stop' : 'Scan me'}
         </Button>
