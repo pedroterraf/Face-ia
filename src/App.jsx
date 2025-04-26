@@ -11,7 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const streamRef = useRef();
-  const intervalRef = useRef(); // 🔧 CAMBIO: guardar el ID del intervalo
+  const intervalRef = useRef(); 
 
   useEffect(() => {
     loadModels();
@@ -19,7 +19,6 @@ function App() {
 
   const requestCameraPermission = async () => {
     try {
-      // 🔧 CAMBIO: eliminado uso innecesario de `navigator.permissions.query`
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       stream.getTracks().forEach(track => track.stop());
     } catch (error) {
@@ -30,7 +29,7 @@ function App() {
 
   const startVideo = async () => {
     if (isVideoPlaying) {
-      stopVideo(); // 🔧 CAMBIO: usar función dedicada para detener
+      stopVideo();
     } else {
       setIsLoading(true);
       try {
@@ -124,10 +123,9 @@ function App() {
       <div className='container_button'>
         <Button
           variant='contained'
-          onClick={async () => {
-            await requestCameraPermission();
-            startVideo();
-          }}
+          onClick={
+            startVideo
+          }
           className='button'>
           {isVideoPlaying ? 'Stop' : 'Scan me'}
         </Button>
