@@ -17,6 +17,14 @@ function App() {
     loadModels();
   }, []);
 
+  const isIOS = () => {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  };
+  
+  const isSafari = () => {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  };
+
   const requestCameraPermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -28,6 +36,9 @@ function App() {
   };
 
   const startVideo = async () => {
+    console.log(isIOS());
+    console.log(isSafari());
+    
     if (isIOS() && isSafari() && window.location.protocol !== "https:") {
       alert("En iOS Safari, la cámara solo funciona sobre HTTPS o localhost.");
       return;
@@ -48,8 +59,7 @@ function App() {
           }
         };
       } catch (err) {
-        console.error("Error al acceder a la cámara:", err);
-        alert("No se pudo acceder a la cámara. Asegurate de haber dado permiso y usar HTTPS.");
+        console.log(err);
         setIsLoading(false);
       }
     }
